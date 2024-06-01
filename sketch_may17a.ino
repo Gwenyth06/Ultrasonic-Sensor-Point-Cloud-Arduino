@@ -32,7 +32,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   if(deg <= 180) {
-    for (deg2 = 0; deg2 <= 180; deg2++) {
+    for (deg2 = 0; deg2 <= 180; deg2=deg2 + 2) {
       digitalWrite(trigPin, LOW);
       delayMicroseconds(2);
 
@@ -49,19 +49,13 @@ void loop() {
       adjacent = distance * cos(rad);
 
       sg902.write(deg2);
+
+      String output = "Distance:"+String(distance)+" Opposite Edge:"+String(opposite)+" Adjacent Edge:"+String(adjacent)+" Degree:"+String(deg)+" Degree2:"+String(deg2);
+      Serial.println(output);
       delay(1000);
     }
-    pos = pos + 5;
+    deg = deg + 2;
     sg90.write(deg);
-  } else {
-
   }
-
-  Serial.print("Distance: ");
-  Serial.println(distance);
-  Serial.print("pos: ");
-  Serial.println(pos);
-  Serial.print("pos2: ");
-  Serial.println(pos2);
   delay(1000);
 }
