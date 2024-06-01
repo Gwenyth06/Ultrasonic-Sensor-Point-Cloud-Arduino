@@ -1,61 +1,48 @@
 #include <LCD_I2C.h>
 #include <Servo.h>
 #include <math.h>
+#include <NewPing.h>
 
-Servo sg90, sg902;
+#define SERVO_X_PIN 2
+#define SERVO_Y_PIN 3
+#define TRIG_PIN 10
+#define ECHO_PIN 11
+#define MAX_DISTANCE 100
 
-long duration;
-int distance;
+Servo servoX, servoY;
 
-int deg = 0;
-int deg2 = 0;
-float adjacent,opposite,rad = 0;
-
-const int trigPin = 10;
-const int echoPin = 11;
-
+NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
 
 void setup() {
   // put your setup code here, to run once:
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
+  servoX.attach(SERVO_X_PIN);
+  servoY.attach(SERVO_Y_PIN);
 
-  sg90.attach(2);
-  sg902.attach(3);
+  servoX.write(0);
+  servoY.write(0);
 
-  sg90.write(deg);
-  sg902.write(deg2);
-  //lcd.print("Back2TheFuture");
   Serial.begin(115200);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  if(deg <= 180) {
-    for (deg2 = 0; deg2 <= 180; deg2=deg2 + 2) {
-      digitalWrite(trigPin, LOW);
-      delayMicroseconds(2);
+  for (int x = 0; x <= 180; x+=10) {
+    for (int y = 0; y <= 180; y+=10) {
+      servoX.write(x);
+      servoY.write(y);
 
-      digitalWrite(trigPin, HIGH);
-      delayMicroseconds(10);
-      digitalWrite(trigPin, LOW);
-
-      duration = pulseIn(echoPin, HIGH);
-
-      distance = duration * 0.034 / 2;
-
-      rad = radians(deg);
-      opposite = distance * sin(rad);
-      adjacent = distance * cos(rad);
-
-      sg902.write(deg2);
-
-      String output = "Distance:"+String(distance)+" Opposite Edge:"+String(opposite)+" Adjacent Edge:"+String(adjacent)+" Degree:"+String(deg)+" Degree2:"+String(deg2);
-      Serial.println(output);
       delay(1000);
+
+      unsigned int distance = sonar.ping_cm();
+
+      if(distance > 0) {
+        Serial.print(x);
+        Serial.print(",");
+        Serial.print(y);
+        Serial.print(",");
+        Serial.println(distance);
+      }
     }
-    deg = deg + 2;
-    sg90.write(deg);
   }
-  delay(1000);
+  delay(5000);
 }
