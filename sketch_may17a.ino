@@ -9,6 +9,8 @@
 #define ECHO_PIN 11
 #define MAX_DISTANCE 100
 
+bool startScan = false;
+
 Servo servoX, servoY;
 
 NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
@@ -26,23 +28,42 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  for (int x = 0; x <= 180; x+=10) {
-    for (int y = 0; y <= 180; y+=10) {
-      servoX.write(x);
-      servoY.write(y);
 
-      delay(1000);
+  // if (Serial.available() > 0) {
+  //   String command = Serial.readStringUntil('\n');  // Read the incoming string
 
-      unsigned int distance = sonar.ping_cm();
+  //   if (command == "p") {
+  //     startScan = true;  // Set the flag to stop the loop
+  //     Serial.println("Scan started.");
+  //   } 
+  // }
 
-      if(distance > 0) {
+  // if (startScan) {
+    
+    for (int x = 0; x <= 100; x += 2) {
+      for (int y = 0; y <= 100; y += 2) {
+        servoX.write(x);
+        servoY.write(y);
+
+        delay(1000);
+
+        unsigned int distance = sonar.ping_cm();
+
         Serial.print(x);
         Serial.print(",");
         Serial.print(y);
         Serial.print(",");
         Serial.println(distance);
+
+        if(x == 180 && y == 150) {
+          Serial.end();
+        }
       }
     }
-  }
-  delay(5000);
+
+    
+  //   startScan = false;
+  //   Serial.println("Scanning completed. Waiting for the start...");
+  // }
+    delay(5000);
 }
