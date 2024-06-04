@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-# Load the points from the file
 points = []
 
 with open("points.txt", "r") as file:
@@ -9,10 +8,8 @@ with open("points.txt", "r") as file:
         x, y, z = map(float, line.strip().split(','))
         points.append((x, y, z))
 
-# Separate the points into x, y, and z lists
 xs, ys, zs = zip(*points)
 
-# Plot the points
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 

@@ -9,7 +9,7 @@
 #define ECHO_PIN 11
 #define MAX_DISTANCE 100
 
-bool startScan = false;
+// bool startScan = false;
 
 Servo servoX, servoY;
 
@@ -40,8 +40,8 @@ void loop() {
 
   // if (startScan) {
     
-    for (int x = 0; x <= 100; x += 2) {
-      for (int y = 0; y <= 100; y += 2) {
+    for (int x = 0; x <= 90; x += 1) {
+      for (int y = 0; y <= 180; y += 1) {
         servoX.write(x);
         servoY.write(y);
 

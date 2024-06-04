@@ -37,8 +37,8 @@ def polar_to_cartesian(x_ang, y_ang, distance):
     
     return x, y, z
 
-def start_scanning():
-    serialInst.write(b'START\n')  # Send start command to Arduino
+# def start_scanning():
+#     serialInst.write(b'START\n')  # Send start command to Arduino
 
 file_path = os.path.abspath("points.txt")
 
