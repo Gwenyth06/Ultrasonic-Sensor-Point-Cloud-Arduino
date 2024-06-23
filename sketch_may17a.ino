@@ -40,12 +40,12 @@ void loop() {
 
   // if (startScan) {
     
-    for (int x = 0; x <= 90; x += 1) {
-      for (int y = 0; y <= 180; y += 1) {
+    for (int x = 45; x <= 90; x += 1) {
+      for (int y = 0; y <= 90; y += 1) {
         servoX.write(x);
         servoY.write(y);
 
-        delay(1000);
+        delay(500);
 
         unsigned int distance = sonar.ping_cm();
 
@@ -55,9 +55,6 @@ void loop() {
         Serial.print(",");
         Serial.println(distance);
 
-        if(x == 180 && y == 150) {
-          Serial.end();
-        }
       }
     }
 
@@ -65,5 +62,5 @@ void loop() {
   //   startScan = false;
   //   Serial.println("Scanning completed. Waiting for the start...");
   // }
-    delay(5000);
+    delay(500);
 }
