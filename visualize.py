@@ -1,7 +1,6 @@
 import plotly.graph_objs as go
 from plotly.offline import plot
 
-# Read points from file
 points = []
 with open("points.txt", "r") as file:
     for line in file:
@@ -10,7 +9,6 @@ with open("points.txt", "r") as file:
 
 xs, ys, zs = zip(*points)
 
-# Create a 3D scatter plot using Plotly
 scatter = go.Scatter3d(
     x=xs,
     y=ys,
@@ -32,5 +30,4 @@ layout = go.Layout(
 
 fig = go.Figure(data=[scatter], layout=layout)
 
-# Save the Plotly figure as an HTML file
-plot(fig, filename='3d_plot2.html')
+plot(fig, filename='3d_plot3.html')
