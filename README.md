@@ -2,6 +2,7 @@
 Visualizing the environment with an ultrasonic sensor by gathering points that form a 3D point cloud using Arduino.
 
 https://gwenyth06.github.io/Ultrasonic-Sensor-Point-Cloud-Arduino/3d_plot.html
+https://gwenyth06.github.io/Ultrasonic-Sensor-Point-Cloud-Arduino/3d_plot2.html
 
 # Components
 * 1x HC-SR04 Ultrasonic Sensor
