@@ -1,36 +1,139 @@
 # Ultrasonic Sensor Point Cloud | Arduino
- Scanning the environment with an ultrasonic sensor to gather points that form a cloud which can be visualized in 3D using Arduino.
+Visualizing the environment with an ultrasonic sensor by gathering points that form a 3D point cloud using Arduino.
 
 https://gwenyth06.github.io/Ultrasonic-Sensor-Point-Cloud-Arduino/3d_plot.html
 
 # Components
-1x HC-SR04 Ultrasonic Sensor
-2x 9g Servos
-1x 3.3V / 5V Output Breadboard Power Module 
-1x 9V / 1 Amp Adaptor
-1x Big Breadboard
+* 1x HC-SR04 Ultrasonic Sensor
+* 2x 9g Servos
+* 1x 3.3V / 5V Output Breadboard Power Module (e.g., mb102)
+* 1x 9V / 1 Amp Adaptor
+* 1x Breadboard (sufficient space for mb102)
 
-# Tools and Machines
-Male/Female Jumper Wires
-Craft Sticks (You can use any material to build it.)
-Glue Gun (Or any sort of adhesive that won't damage the components.)
+# Tools and Materials
+* Male/Female Jumper Wires
+* Craft Sticks (or any suitable material)
+* Glue Gun (or any adhesive safe for electronics)
 
-# IDEs
-I used Arduino IDE and Visual Studio Code for this project. You can use anything as you please.
+# Software
+* Arduino IDE
+* Visual Studio Code (or any preferred IDE)
 
 # Description
 This project aims to visualize real-time data from an ultrasonic sensor mounted on servo motors using 3D point cloud visualization. The ultrasonic sensor scans its environment by rotating on two axes, capturing distance measurements at various angles. These measurements are then converted into Cartesian coordinates and visualized as a dynamic 3D point cloud, providing an intuitive representation of the surrounding objects' spatial distribution and distances.
 
 # Circuit Diagram
-2 Servos powered by breadboard power supply and 1 Ultrasonic sensor powered by Arduino UNO itself. Servos shouldn't be powered by Arduino for the reason of not enough Amps being supplied and there is a possiblity to burn the voltage regulator. 9g Servos draw 500 mA to 750 mA and operate at 4.8 to 6 Volts so it is a way safer approach to use an external power supply. HC-SR04 ultrasonic module consumes 15 mA and operates at 5V so I connected it directly to Arduino.  
+* Servos powered by an external breadboard power supply
+* Ultrasonic sensor powered by Arduino UNO
+  
+The servos should not be powered by the Arduino directly due to insufficient current supply, which could damage the voltage regulator. Instead, an external power supply is used. The HC-SR04 ultrasonic module consumes 15 mA and operates at 5V, so it is connected directly to the Arduino.
+
 ![](diagram.png)
 
 # Assembling the Components
-In order to scan the environment in 3D, we need 2 servos: Servo 1 in the picture is going to move horizontally and Servo 2 is going to move vertically to scan between a defined range of angles. So inorder to accomplish this, we have to put one servo at the bottom to turn in a horizontal plane and the second servo on top to turn the sensor in a vertical plane.
+To scan the environment in 3D, two servos are required:
+
+* Servo 1 for horizontal movement
+* Servo 2 for vertical movement
+* 
+Servo 1 is placed at the bottom to rotate horizontally, while Servo 2 is mounted on top to turn the sensor vertically.
+
 ![](picture_2.jpg)
-After putting together these components, wiring the jumpers and connecting it to power is all is left. There is one important thing that shouldn't be overlooked: Do not forget to ground the servos! Otherwise they are all gonna go crazy.
+
+After assembling the components and wiring the jumpers, connect the setup to power. Ensure to ground the servos properly to prevent erratic behavior.
+
 ![](picture_1.jpg)
 
+
 # How It Works
-I created a sketch in Arduino IDE and defined the functions of Servos and Sensor using specific libraries for each. Calculations and visualization is coded in python. The sketch has an open serial port which is sending the degrees and the distance values that come from the servos and the sensor at every single position a pulse is triggered to the "save_to_file.py".  
-After powering every component, the sensor is going to start scanning but it won't save any points. To save the points you should run the "save_to_file.py" first and there is going to be a list of ports. Choose the port that is connected to Arduino inorder to open the serial communication. After you choose the port the servos are going to reset their position. The logic behind this file is to calculate the points and save them in "points.txt" file. You can see the coming data and the calculated points in the terminal. After the servos reset their position, stop the execution of "save_to_file.py" and run the "visualize.py" to view the 3D plot created in a point cloud format. 
+The project involves an Arduino sketch that controls two servos and an ultrasonic sensor, and a set of Python scripts that process and visualize the data. Here is a step-by-step breakdown:
+
+**Arduino Sketch**
+
+1. Servo Control:
+
+* The Arduino sketch uses the Servo library to control two servos: one for horizontal movement (Servo X) and one for vertical movement (Servo Y).
+* Servo X rotates the ultrasonic sensor horizontally, while Servo Y tilts it vertically.
+  
+2. Ultrasonic Sensor Measurement:
+
+* The HC-SR04 ultrasonic sensor measures the distance to an object by emitting a sound wave and measuring the time it takes for the echo to return.
+* The sensor is connected to the Arduino, which triggers the sensor to take measurements at each position set by the servos.
+
+3. Data Transmission:
+
+* The Arduino collects the angle (both horizontal and vertical) and distance data from the sensor.
+* This data is sent via serial communication to the connected computer. The format of the data is **'x_angle, y_angle, distance'**.
+  
+**Python Script (save_to_file.py)**
+
+1. Serial Communication Setup:
+
+* The Python script initializes serial communication with the Arduino. It lists available COM ports and prompts the user to select the correct one.
+* The selected port is opened, and communication with the Arduino begins.
+  
+2. Polar to Cartesian Conversion:
+
+* The script reads the angle and distance data from the serial port.
+* Using trigonometric calculations, it converts the polar coordinates (angles and distance) into Cartesian coordinates (x, y, z).
+
+3. Data Saving:
+
+* The calculated Cartesian coordinates are saved into a file (points.txt).
+* This file will be used later for visualization.
+
+4. Running the Script:
+
+* When the script is executed, it starts reading data from the Arduino and saving the calculated points in real-time.
+* After the data collection is complete, the script execution is stopped manually.
+
+**Python Script (visualize.py)**
+
+1. Reading Data:
+
+* The visualization script reads the Cartesian coordinates from points.txt.
+
+2. 3D Point Cloud Visualization:
+
+* Using a 3D visualization library (Plotly), the script plots the points in a 3D space.
+* The plot includes axis labels for better understanding of the spatial distribution.
+
+3. Interactive Visualization:
+
+* The resulting plot is interactive, allowing users to zoom, pan, and rotate to explore the 3D point cloud from different perspectives.
+
+**Detailed Steps:**
+
+1. Powering Up:
+
+* Connect the Arduino, servos, and ultrasonic sensor as per the circuit diagram.
+* Ensure the servos are powered by the external power supply to avoid overloading the Arduino.
+
+2. Running save_to_file.py:
+
+* Execute the script in the terminal or command prompt.
+* Select the appropriate COM port when prompted.
+* The servos will reset their positions, and the script will start collecting data.
+
+3. Data Collection:
+
+* The sensor starts scanning the environment. The servos move the sensor through the defined range of angles, and distance measurements are taken at each position.
+* The angle and distance data are converted to Cartesian coordinates and saved to points.txt.
+
+4. Stopping Data Collection:
+
+* Once the scanning is complete, stop the execution of save_to_file.py by interrupting the process (e.g., pressing Ctrl+C).
+
+5. Running visualize.py:
+
+* Execute the visualization script.
+* The script reads the saved coordinates from points.txt and generates a 3D point cloud plot.
+* The plot is displayed in a web browser or a dedicated visualization window.
+
+By following these steps, you can visualize the 3D representation of the environment scanned by the ultrasonic sensor. The interactive plot allows you to explore the spatial distribution of objects and understand the sensor's view of its surroundings.
+
+![](demonstration.gif)
+
+
+# Summary
+While the project demonstrates the concept effectively, improvements can be made in stability, design, and usability. For instance, using lighter materials and more robust servos could enhance performance. Noise reduction techniques could also be applied to the gathered data for a clearer visualization. Despite the limitations, the project highlights the fundamental principles of ultrasonic sensor-based 3D scanning and visualization.
